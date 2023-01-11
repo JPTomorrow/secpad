@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  html {
+    font-family: "Bebas Neue", cursive;
+    @apply bg-black2 text-white;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  .default-button {
+    @apply mr-5 flex h-8 w-8 cursor-pointer 
+    items-center justify-center rounded-3xl 
+    border-[1px] border-black2 bg-transparent
+    text-black2 shadow-lg transition-all
+    duration-300 ease-linear hover:rounded-xl
+    hover:bg-black2 hover:bg-opacity-40 hover:text-gray-900 dark:bg-transparent;
+  }
+
+  .nav {
+    @apply flex w-screen justify-center;
+  }
+
+  .logo-banner {
+    @apply min-h-[100px] min-w-[400px] bg-gradient-to-t from-white via-white to-transparent;
+  }
+
+  .rounded-bottom {
+    border-bottom-left-radius: 40% 20px;
+    border-bottom-right-radius: 40% 20px;
+  }
+
+  .note-clip-outer {
+    clip-path: polygon(0% 0, 88% 0%, 100% 15%, 100% 100%, 0 100%);
+  }
+  .note-clip-inner {
+    clip-path: polygon(
+      0.2% 0.2%,
+      87.9% 0.2%,
+      87.9% 16%,
+      99.8% 16%,
+      99.8% 100%,
+      0.2% 100%
+    );
+  }
+
+  .note-outer {
+    @apply relative mx-auto mt-[30px] min-h-full w-full max-w-[600px] flex-1 bg-white text-white;
+  }
+
+  .note-inner {
+    @apply absolute min-h-full w-full max-w-[600px] bg-black2 py-[10px] px-[50px];
+  }
+
+  .note-info {
+    @apply flex justify-start;
+  }
+}
