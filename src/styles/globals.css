@@ -34,6 +34,14 @@
     border-bottom-right-radius: 40% 20px;
   }
 
+  .dd-open-item {
+    @apply w-3/4 rounded-sm border-t-[1px] border-white px-3 py-2 text-left transition-all duration-150 hover:border-t-[2px] hover:bg-black;
+  }
+
+  .dd-selected-item {
+    @apply mb-2 w-3/4 border-[1px] border-white px-3 py-2 text-left;
+  }
+
   .note-clip-outer {
     clip-path: polygon(0% 0, 88% 0%, 100% 15%, 100% 100%, 0 100%);
   }
@@ -57,6 +65,6 @@
   }
 
   .note-info {
-    @apply flex justify-start;
+    @apply flex justify-start border-b-[1px] p-2 text-2xl;
   }
 }

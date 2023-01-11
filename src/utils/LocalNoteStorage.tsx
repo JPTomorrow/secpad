@@ -13,22 +13,31 @@ type Note = {
 };
 
 // state hook for local storage
-function useLocalStorage<T>(key: string, initialValue: T[]) {
-  const [storedValue, setStoredValue] = useState(initialValue);
+const useLocalStorage = <T,>(key: string, initialValue: T[]) => {
+  const [storedValue, setStoredValue] = useState<T[]>(() => {
+    try {
+      const item = localStorage.getItem(key);
+      if (!item) {
+        localStorage.setItem(key, JSON.stringify(initialValue));
+        throw new Error(`Unable to retrieve data with key: ${key}`);
+      } else {
+        console.log(`initial: ${key} -> ${item}`);
+      }
 
-  useEffect(() => {
-    const stored = localStorage.getItem(key);
-    setStoredValue(stored ? JSON.parse(stored) : initialValue);
-  }, []);
+      return JSON.parse(item as string);
+    } catch (err: any) {
+      console.warn("Error setting initial local storage: ", err.message);
+      return initialValue;
+    }
+  });
 
-  useEffect(() => {
-    console.log(`setting: ${key} -> ${JSON.stringify(storedValue)}`);
-    if (storedValue.length > 0)
-      localStorage.setItem(key, JSON.stringify(storedValue));
-  }, [storedValue, key]);
+  const setValue = (value: T[]) => {
+    setStoredValue(value);
+    window.localStorage.setItem(key, JSON.stringify(value));
+  };
 
-  return [storedValue, setStoredValue] as const;
-}
+  return [storedValue, setValue] as const;
+};
 
 export { useLocalStorage };
 export type { NoteCategory, Note };

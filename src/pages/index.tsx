@@ -61,16 +61,25 @@ const Home: NextPage = () => {
 
         <div className="note-clip-outer note-outer">
           <div className="note-clip-inner note-inner">
-            <h1 className="mt-[50px] w-3/4 border-b-[1px] border-white text-[32pt]">
-              <CategoryDropdown onCategoryChange={handleCategoryChange} />
+            <h1 className="mt-[50px] w-3/4 text-[32pt]">
+              <CategoryDropdown
+                cats={cats}
+                onCategoryChange={handleCategoryChange}
+              />
             </h1>
-            {filteredNotes.map((n, i) => {
-              return (
-                <div className="note-info" key={i}>
-                  {n.title}
-                </div>
-              );
-            })}
+            <div className="mt-3">
+              {filteredNotes.length > 0 ? (
+                filteredNotes.map((n, i) => {
+                  return (
+                    <div className="note-info" key={i}>
+                      {n.title}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="note-info">No notes in this category</div>
+              )}
+            </div>
           </div>
         </div>
       </main>
