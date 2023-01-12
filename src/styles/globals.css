@@ -73,6 +73,6 @@
   }
 
   .note-info {
-    @apply flex justify-between border-b-[1px] p-2 text-2xl;
+    @apply flex justify-between border-b-[1px] p-2 text-2xl hover:bg-black;
   }
 }
