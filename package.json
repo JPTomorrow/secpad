@@ -9,11 +9,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@types/react-transition-group": "^4.4.5",
     "framer-motion": "^8.4.0",
     "next": "13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
+    "react-transition-group": "^4.4.5",
     "react-type-animation": "^2.1.2",
     "zod": "^3.20.2"
   },
