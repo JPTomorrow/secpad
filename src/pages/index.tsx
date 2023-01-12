@@ -15,11 +15,16 @@ const Home: NextPage = () => {
   const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
   const [selectedCat, setSelectedCat] = useState<NoteCategory>();
   const [showAddModal, setAddModal] = useState(false);
+  const [showInfoModal, setInfoModal] = useState(false);
   const nodeRef = useRef(null);
 
-  useEffect(() => {
+  const updateFilteredNotes = () => {
     setFilteredNotes(allNotes.filter((x) => x.categoryId === selectedCat?.id));
-  }, [selectedCat]);
+  };
+
+  useEffect(() => {
+    updateFilteredNotes();
+  }, [selectedCat, allNotes]);
 
   const addCategory = (name: string) => {
     const newCat: NoteCategory = {
@@ -40,7 +45,9 @@ const Home: NextPage = () => {
   };
 
   const handleAddSubmit = (title: string, contents: string) => {
+    setAddModal(false);
     if (!selectedCat) return;
+
     const newNote: Note = {
       title: title,
       content: contents,
@@ -48,8 +55,51 @@ const Home: NextPage = () => {
       date: "",
     };
     setNotes([...allNotes, newNote]);
+  };
+
+  const cancelAddModal = () => {
     setAddModal(false);
   };
+
+  let page;
+  if (showAddModal) {
+    page = <AddModal onSubmit={handleAddSubmit} onCancel={cancelAddModal} />;
+  } else if (showInfoModal) {
+  } else {
+    page = (
+      <>
+        <h1 className="mt-[50px] w-3/4 text-[32pt]">
+          <CategoryDropdown
+            cats={cats}
+            onCategoryChange={handleCategoryChange}
+          />
+        </h1>
+        <div className="mt-3">
+          {filteredNotes.length > 0 ? (
+            filteredNotes.map((n, i) => {
+              return (
+                <div className="note-info" key={i}>
+                  {n.title}
+                  {i == filteredNotes.length - 1 ? (
+                    <button onClick={() => setAddModal(!showAddModal)}>
+                      <AiOutlinePlus />
+                    </button>
+                  ) : null}
+                </div>
+              );
+            })
+          ) : (
+            <div className="note-info">
+              <p>No notes in this category</p>
+              <button onClick={() => setAddModal(!showAddModal)}>
+                <AiOutlinePlus />
+              </button>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -63,69 +113,17 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <Navbar>
-          <button
-            onClick={() => addCategory("Test")}
-            className="default-button"
-          >
+          <button onClick={() => addCategory("Test")} className="nav-button">
             <AiOutlinePlus />
           </button>
-          <button onClick={() => ResetLocalState()} className="default-button">
+          <button onClick={() => ResetLocalState()} className="nav-button">
             <BsRecycle />
           </button>
         </Navbar>
 
-        {/* <CSSTransition
-          nodeRef={nodeRef}
-          in={showAddModal}
-          timeout={300}
-          classNames={{
-            enter: "scale-y-100 origin-bottom",
-            enterActive: "scale-y-0 transition-all duration-300",
-            exit: "scale-y-0 origin-bottom",
-            exitActive: "scale-y-100 transition-all duration-300",
-          }}
-        > */}
         <div ref={nodeRef} className="note-clip-outer note-outer">
-          <div className="note-clip-inner note-inner">
-            {showAddModal ? (
-              <AddModal onSubmit={handleAddSubmit} />
-            ) : (
-              <>
-                {" "}
-                <h1 className="mt-[50px] w-3/4 text-[32pt]">
-                  <CategoryDropdown
-                    cats={cats}
-                    onCategoryChange={handleCategoryChange}
-                  />
-                </h1>
-                <div className="mt-3">
-                  {filteredNotes.length > 0 ? (
-                    filteredNotes.map((n, i) => {
-                      return (
-                        <div className="note-info" key={i}>
-                          {n.title}
-                          {i == filteredNotes.length - 1 ? (
-                            <button onClick={() => setAddModal(!showAddModal)}>
-                              <AiOutlinePlus />
-                            </button>
-                          ) : null}
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <div className="note-info">
-                      <p>No notes in this category</p>
-                      <button onClick={() => setAddModal(!showAddModal)}>
-                        <AiOutlinePlus />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
+          <div className="note-clip-inner note-inner">{page}</div>
         </div>
-        {/* </CSSTransition> */}
       </main>
     </>
   );
