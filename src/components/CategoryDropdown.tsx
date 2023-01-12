@@ -35,7 +35,7 @@ const CategoryDropdown = ({
 
   return (
     <div className="flex flex-col items-start">
-      {isOpen ? (
+      {isOpen && cats.length > 0 ? (
         cats.map((c, i) => {
           return (
             <button
@@ -52,7 +52,7 @@ const CategoryDropdown = ({
           className="dd-selected-item flex items-center justify-between"
           onClick={() => setOpen(!isOpen)}
         >
-          {selected ? selected.name : "Create a new category"}
+          {selected ? selected.name : "No categories"}
           <AiOutlineDown size={22} className="float-right" />
         </button>
       )}

@@ -9,6 +9,7 @@ import { BsRecycle } from "react-icons/bs";
 import { CSSTransition } from "react-transition-group";
 import AddModal from "@/components/AddModal";
 import NoteInfoModal from "@/components/NoteInfoModal";
+import AddCategoryModal from "@/components/AddCategoryModal";
 
 const Home: NextPage = () => {
   const [cats, setCats] = useLocalStorage<NoteCategory>("categories", []);
@@ -16,7 +17,8 @@ const Home: NextPage = () => {
   const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
   const [selectedCat, setSelectedCat] = useState<NoteCategory>();
   const [selectedNote, setSelectedNote] = useState<Note>();
-  const [showAddModal, setAddModal] = useState(false);
+  const [showAddNoteModal, setAddNoteModal] = useState(false);
+  const [showAddCatModal, setAddCatModal] = useState(false);
   const [showInfoModal, setInfoModal] = useState(false);
   const nodeRef = useRef(null);
 
@@ -28,12 +30,13 @@ const Home: NextPage = () => {
     updateFilteredNotes();
   }, [selectedCat, allNotes]);
 
-  const addCategory = () => {
+  const addCategory = (name: string) => {
     const newCat: NoteCategory = {
-      name: `${name} ${(cats.length + 1).toString()}`,
+      name: name,
       id: cats.length + 1,
     };
     setCats([...cats, newCat]);
+    setAddCatModal(false);
   };
 
   const deleteCategory = () => {
@@ -54,7 +57,7 @@ const Home: NextPage = () => {
   };
 
   const addNote = (title: string, contents: string) => {
-    setAddModal(false);
+    setAddNoteModal(false);
     if (!selectedCat) return;
 
     const newNote: Note = {
@@ -72,7 +75,11 @@ const Home: NextPage = () => {
   };
 
   const cancelAddModal = () => {
-    setAddModal(false);
+    setAddNoteModal(false);
+  };
+
+  const cancelAddCategoryModal = () => {
+    setAddCatModal(false);
   };
 
   const closeNoteInfoModal = () => {
@@ -80,8 +87,15 @@ const Home: NextPage = () => {
   };
 
   let page;
-  if (showAddModal) {
+  if (showAddNoteModal) {
     page = <AddModal onSubmit={addNote} onCancel={cancelAddModal} />;
+  } else if (showAddCatModal) {
+    page = (
+      <AddCategoryModal
+        onSubmit={addCategory}
+        onCancel={cancelAddCategoryModal}
+      />
+    );
   } else if (showInfoModal) {
     page = (
       <NoteInfoModal
@@ -113,7 +127,7 @@ const Home: NextPage = () => {
                 >
                   {n.title}
                   {i == filteredNotes.length - 1 ? (
-                    <button onClick={() => setAddModal(!showAddModal)}>
+                    <button onClick={() => setAddNoteModal(!showAddNoteModal)}>
                       <AiOutlinePlus />
                     </button>
                   ) : null}
@@ -123,7 +137,7 @@ const Home: NextPage = () => {
           ) : (
             <div className="note-info">
               <p>No notes in this category</p>
-              <button onClick={() => setAddModal(!showAddModal)}>
+              <button onClick={() => setAddNoteModal(!showAddNoteModal)}>
                 <AiOutlinePlus />
               </button>
             </div>
@@ -145,7 +159,7 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <Navbar>
-          <button onClick={() => addCategory()} className="nav-button">
+          <button onClick={() => setAddCatModal(true)} className="nav-button">
             <AiOutlinePlus />
           </button>
           <button onClick={() => deleteCategory()} className="nav-button">
