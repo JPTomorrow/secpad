@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { TiCancel } from "react-icons/ti";
 
+type SubmitParams = {
+  submit: (name: string) => void;
+};
+
 const AddCategoryModal = ({
   onSubmit,
   onCancel,
 }: {
-  onSubmit: Function;
-  onCancel: Function;
+  onSubmit: SubmitParams["submit"];
+  onCancel: () => void;
 }) => {
   const [name, setName] = useState("");
-
-  const handleSubmit = () => {
-    onSubmit(name);
-  };
 
   return (
     <div className="mt-5 flex flex-col gap-3">
@@ -25,7 +25,7 @@ const AddCategoryModal = ({
         onChange={(e) => setName(e.target.value)}
       />
       <div className="flex gap-3">
-        <button className="default-button" onClick={handleSubmit}>
+        <button className="default-button" onClick={() => onSubmit(name)}>
           Submit
         </button>
         <button className="default-button p-0" onClick={() => onCancel()}>

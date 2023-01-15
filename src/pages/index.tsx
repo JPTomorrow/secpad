@@ -1,12 +1,13 @@
 import Navbar from "@/components/Navbar";
 import CategoryDropdown from "@/components/CategoryDropdown";
-import { Note, NoteCategory, useLocalStorage } from "@/utils/LocalNoteStorage";
+import type { Note, NoteCategory } from "@/utils/LocalNoteStorage";
+import { useLocalStorage } from "@/utils/LocalNoteStorage";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { BsRecycle } from "react-icons/bs";
-import { CSSTransition } from "react-transition-group";
+// import { CSSTransition } from "react-transition-group";
 import AddModal from "@/components/AddModal";
 import NoteInfoModal from "@/components/NoteInfoModal";
 import AddCategoryModal from "@/components/AddCategoryModal";
@@ -46,7 +47,7 @@ const Home: NextPage = () => {
     setNotes(allNotes.filter((x) => x.categoryId != selectedCat.id));
   };
 
-  const handleCategoryChange = (category: NoteCategory) => {
+  const handleCategoryChange = (category: NoteCategory | undefined) => {
     setSelectedCat(category);
   };
 
@@ -63,7 +64,7 @@ const Home: NextPage = () => {
     const newNote: Note = {
       title: title,
       content: contents,
-      categoryId: selectedCat!.id,
+      categoryId: selectedCat.id,
       date: "",
     };
     setNotes([...allNotes, newNote]);
@@ -99,7 +100,7 @@ const Home: NextPage = () => {
   } else if (showInfoModal) {
     page = (
       <NoteInfoModal
-        note={selectedNote!}
+        note={selectedNote}
         onClose={closeNoteInfoModal}
         onDeleteNote={deleteNote}
       />

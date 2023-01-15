@@ -1,13 +1,17 @@
-import { NoteCategory, useLocalStorage } from "@/utils/LocalNoteStorage";
+import type { NoteCategory } from "@/utils/LocalNoteStorage";
 import { useEffect, useState } from "react";
 import { AiOutlineDown } from "react-icons/ai";
+
+type CDParams = {
+  categoryChange: (category: NoteCategory | undefined) => void;
+};
 
 const CategoryDropdown = ({
   cats,
   onCategoryChange,
 }: {
   cats: NoteCategory[];
-  onCategoryChange?: Function;
+  onCategoryChange?: CDParams["categoryChange"];
 }) => {
   const [isOpen, setOpen] = useState(false);
   const [selected, setSelected] = useState<NoteCategory>();
@@ -15,7 +19,7 @@ const CategoryDropdown = ({
   const initializeSelected = () => {
     if (cats.length > 0) {
       setSelected(cats[0]);
-      handleCategoryChange(cats[0]!);
+      handleCategoryChange(cats[0]);
     }
   };
 
@@ -27,7 +31,8 @@ const CategoryDropdown = ({
     cats.length == 0 ? setSelected(undefined) : initializeSelected();
   }, [cats]);
 
-  const handleCategoryChange = (category: NoteCategory) => {
+  const handleCategoryChange = (category: NoteCategory | undefined) => {
+    if (!category) return;
     setSelected(category);
     if (onCategoryChange) onCategoryChange(category);
     setOpen(false);

@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { TiCancel } from "react-icons/ti";
 
+type AddModalParams = {
+  submit: (title: string, contents: string) => void;
+  cancel: () => void;
+};
+
 const AddModal = ({
   onSubmit,
   onCancel,
 }: {
-  onSubmit: Function;
-  onCancel: Function;
+  onSubmit: AddModalParams["submit"];
+  onCancel: AddModalParams["cancel"];
 }) => {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");

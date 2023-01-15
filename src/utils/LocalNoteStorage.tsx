@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type NoteCategory = {
   name: string;
@@ -24,9 +24,9 @@ const useLocalStorage = <T,>(key: string, initialValue: T[]) => {
         console.log(`initial: ${key} -> ${item}`);
       }
 
-      return JSON.parse(item as string);
-    } catch (err: any) {
-      console.warn("Error setting initial local storage: ", err.message);
+      return JSON.parse(item) as T[];
+    } catch (err) {
+      console.warn("Error setting initial local storage: ", err);
       return initialValue;
     }
   });
